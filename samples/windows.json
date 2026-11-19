@@ -1,0 +1,30 @@
+{
+  "transition": {
+    "windows": [["early", "1"], ["late", "1"]],
+    "supply": {
+      "ports": ["A", "B", "C", "D"],
+      "layouts": [{"x": {"A": "1"}, "y": {"A": "1"}, "b": {"B": "1"}}, {"a": {"A": "1"}, "b": {"B": "1"}}],
+      "permissions": {"original": [["x", "a"], ["b", "b"]], "corrected": [["x", "a"], ["y", "b"], ["b", "b"]]}
+    },
+    "receive": {
+      "ports": ["D", "C", "B", "A"],
+      "layouts": [{"a": {"A": "1"}, "b": {"B": "1"}}, {"a": {"A": "1"}, "b": {"B": "1"}}],
+      "permissions": {"ab": [["a", "b"]], "aa": [["a", "a"]], "ba": [["b", "a"]]}
+    },
+    "v1_checks": [[0, "x", "a", "A", "1", "1"], [0, "y", "a", "A", "1", "1"], [1, "b", "b", "B", "1", "1"]]
+  },
+  "fractional": {
+    "windows": [["early-f", "1"], ["late-f", "2"]],
+    "supply": {
+      "ports": ["A", "B", "C", "D"],
+      "layouts": [{"s": {"A": "3/4", "B": "1"}}, {"s": {"B": "2"}}],
+      "permissions": {"one": [["s", "s"]]}
+    },
+    "receive": {
+      "ports": ["D", "C", "B", "A"],
+      "layouts": [{"r": {"A": "1", "B": "3/4"}}, {"r": {"B": "2"}}],
+      "permissions": {"one": [["r", "r"]]}
+    },
+    "v1_checks": [[0, "s", "r", "A", "1/4", "3/4"], [1, "s", "r", "B", "2", "2"]]
+  }
+}
