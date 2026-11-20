@@ -18,7 +18,7 @@ def scenario(case_id, inputs, expected, actual, downstream_expected, downstream_
 
 
 def fail_commit_on_insert(db, table):
-    if table not in ('packets', 'receipts'):
+    if table not in ('packets', 'receipts', 'window_packets', 'window_plans'):
         raise ValueError(table)
     db.execute('CREATE TABLE commit_permits (permit INTEGER PRIMARY KEY)')
     db.execute('''CREATE TABLE commit_attempts (
@@ -30,7 +30,9 @@ def fail_commit_on_insert(db, table):
 
 def rows(db, table):
     if table not in {'batches', 'revisions', 'measurements', 'qualifications', 'packets', 'pickups',
-                     'accepted_packets', 'reports', 'receipts', 'commit_attempts'}:
+                     'accepted_packets', 'reports', 'receipts', 'commit_attempts',
+                     'window_packets', 'window_permissions', 'window_pickups',
+                     'accepted_window_packets', 'window_plans', 'window_plan_receipts'}:
         raise ValueError(table)
     return db.execute(f'SELECT COUNT(*) FROM {table}').fetchone()[0]
 

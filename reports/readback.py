@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from reports.receipts import Receipt, load_receipt
 from reports.snapshots import ReportSnapshot
+from reports.window_plans import get_window_plan_record
 
 
 @dataclass(frozen=True)
@@ -19,3 +20,8 @@ def get_report(db: sqlite3.Connection, report_id: int) -> Report:
         raise KeyError(report_id)
     fixed_id, encoded = row
     return Report(fixed_id, ReportSnapshot.from_record(json.loads(encoded)), load_receipt(db, fixed_id))
+
+
+def get_window_plan(db: sqlite3.Connection, plan_id: str) -> dict:
+    """Read a previously stored dual-window plan and its receipt by plan id."""
+    return get_window_plan_record(db, plan_id)

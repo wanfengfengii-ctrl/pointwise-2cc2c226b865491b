@@ -4,6 +4,8 @@ from pathlib import Path
 from issue.envelope import encode_packet
 from issue.publish import seal
 from issue.transfer import get_packet
+from issue.window_publish import seal_windows
+from issue.window_transfer import get_windows_packet
 from review.admission import admit
 from review.reconcile import review
 from run_station import describe_range, open_center, open_station
@@ -35,6 +37,22 @@ def seed(db, case, side):
             revisions[label] = revise(db, batch, side, root, measurements)
         by_window.append(revisions)
     return tuple(by_window)
+
+
+def label_permissions(case, side, revisions):
+    """Translate a case's label permission table into real revision ids."""
+    return {
+        label: [[revisions[0][front], revisions[1][back]] for front, back in pairs]
+        for label, pairs in case[side]["permissions"].items()
+    }
+
+
+def seal_labeled_windows(db, case, side, revisions, permission_label):
+    """Seal the two windows for one permission table entry of a seeded station."""
+    window_ids = [batch for batch, _ in case["windows"]]
+    pairs = label_permissions(case, side, revisions)[permission_label]
+    packet_id = seal_windows(db, window_ids, pairs)
+    return get_windows_packet(db, packet_id)
 
 
 def _v1_material(case, side):
